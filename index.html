@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><title>IITJ Mess Menu</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#151d31;--muted:#9aa7bd;--line:#28344d;--accent:#c6f36a;--white:#f5f7fb}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#26364a 0,transparent 38%),var(--bg);color:var(--white);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:760px;margin:auto;padding:26px 17px 48px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:2px;font-weight:800}.month{color:var(--muted);font-size:13px}
+h1{font-size:clamp(30px,7vw,46px);line-height:1.03;margin:8px 0 6px;letter-spacing:-1.5px}.sub{color:var(--muted);margin:0 0 22px}
+.datebar{display:flex;align-items:center;gap:9px;margin-bottom:15px}.datebar button,.meal button,.navbtn{border:1px solid var(--line);background:#19243a;color:var(--white);border-radius:12px;padding:10px 13px;font:inherit;cursor:pointer}.datebar button:active,.meal button:active{transform:scale(.97)}
+input[type=date],input[type=search]{background:#111a2c;color:var(--white);border:1px solid var(--line);border-radius:12px;padding:11px;font:inherit;min-width:0}
+.datebar input{flex:1}.daylabel{margin:18px 0 12px;display:flex;align-items:end;justify-content:space-between}.daylabel strong{font-size:24px}.daylabel span{color:var(--muted);font-size:13px}
+.meals{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}.meal button{width:100%;padding:10px 3px;font-size:13px;color:var(--muted)}.meal button.active{background:var(--accent);border-color:var(--accent);color:#17200d;font-weight:800}
+.card{background:linear-gradient(145deg,#1a2740,#121a2b);border:1px solid var(--line);border-radius:19px;padding:18px;margin:0 0 12px;box-shadow:0 12px 32px #0002}
+.cardhead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}.card h2{font-size:17px;margin:0}.tag{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:800}
+.food{font-size:17px;line-height:1.5}.muted{color:var(--muted);font-size:13px}.common{border-top:1px solid var(--line);margin-top:15px;padding-top:13px}.common .food{font-size:14px;color:#c7d1e1}
+.search{width:100%;margin:8px 0 16px}.results{display:grid;gap:8px}.result{background:var(--panel);border:1px solid var(--line);padding:12px;border-radius:12px}.result b{color:var(--accent);font-size:12px}.result p{margin:4px 0 0}
+.note{color:var(--muted);font-size:12px;margin-top:22px}.empty{color:var(--muted);padding:24px;text-align:center;border:1px dashed var(--line);border-radius:15px}
+@media(min-width:600px){main{padding-top:38px}.card{padding:22px}.food{font-size:18px}}
+</style></head><body><main>
+<div class="top"><div class="eyebrow">IIT JODHPUR · DINING</div><div class="month">NOVEMBER 2026</div></div>
+<h1>Mess menu<span style="color:var(--accent)">.</span></h1><p class="sub">What’s cooking today?</p>
+<div class="datebar"><button id="prev" aria-label="Previous day">←</button><input id="date" type="date" min="2026-11-01" max="2026-11-30"><button id="next" aria-label="Next day">→</button></div>
+<div class="daylabel"><strong id="dayname">Friday</strong><span id="prettydate">13 November</span></div>
+<div class="meals" id="meals"></div><section id="menu"></section>
+<input class="search" id="search" type="search" placeholder="Search the month's menu…">
+<div id="results" class="results"></div>
+<p class="note">Menu data is taken from the uploaded November 2026 non-veg menu. The sheet lists a repeating weekly menu, so dates are matched to their weekday. “Additional item” is shown exactly as the sheet lists it; it isn't always a non-veg dish.</p>
+</main><script>
+const DATA={"Monday": {"Breakfast": {"veg": "Masala Poori, Matar Sabzi and Kheer", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Gobi Achari, kala chana, Moong dal", "extra": "Boondi raita(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad, Ghee"}, "Snacks": {"veg": "Dahi bada, Mirchi Chutney, Imli Chutney", "extra": "__", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "khatta Meetha Kaddu, Sabut Masoor dal, Gulab Jamun", "extra": "Egg Burji", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums,Ghee"}}, "Tuesday": {"Breakfast": {"veg": "Idli+Fried Idli or Idli+Medu Vada, Sambhar, Coconut Chutney, Tomato Chutney", "extra": "Banana(2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Chana dal, Kashmiri Dum aloo, Aloo palak", "extra": "Curd(100ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad,Ghee"}, "Snacks": {"veg": "Aloo tikki, dahi, chole, Chutney, onion", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Methhi Matar Malai, Mix Veg, Dal Makhani, Jeera Rice", "extra": "—", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums,Ghee"}}, "Wednesday": {"Breakfast": {"veg": "Poha, Sambar and Jalebi", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Malai kofta , Cabbage Matar, dal palak", "extra": "Veg Raita(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle,Lizzat Papad, Ghee"}, "Snacks": {"veg": "Pani puri, Imili pani", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Aloo Kundru(dry), Dal Fry, Shahi Tukda with rabri", "extra": "Chicken Butter Masala", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums,Ghee"}}, "Thursday": {"Breakfast": {"veg": "Methi Paratha, Aloo-matar ki Sabji, Dahi", "extra": "Banana(2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Kadi Pakora, Aloo-chokha, Lobiya Dal", "extra": "Sweet Lassi(200ml)", "common": "Plain Rice, Atta Roti, , Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle,Lizzat Papad, Ghee"}, "Snacks": {"veg": "Maggi , ketchup", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Mix Veg, veg manchurian, Channa Dal, Biryani", "extra": "__", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}, "Friday": {"Breakfast": {"veg": "Uttapam , Sambhar, Coconut Chutney", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Rajma , Gajar-beans-gobi sabzi, Dahi Aloo", "extra": "Pudina Chaas(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad, Ghee"}, "Snacks": {"veg": "Veg Sandwich , ketchup, Seasonal fruits", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Capsicum aloo, Dal Fry, Veg Biryani, Khoya Barfi", "extra": "Egg Curry with green peas and aloo", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}, "Saturday": {"Breakfast": {"veg": "Masala dosa, Coconut Chutney, Sambhar", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Hariyali Kofta, Gajar Matar sabzi, Lasooni Dal Tadka (arhar)", "extra": "Curd(100ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad,Ghee"}, "Snacks": {"veg": "Vada pao + chutney or Pao Bhaji+lemon+onion", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Aloo spring onion fry, Chole Bhature, Dal Tadka (mix)", "extra": "", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}, "Sunday": {"Breakfast": {"veg": "Aloo Pyaaz paratha, Chutney, Dahi", "extra": "Boiled Egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Soya Chunk, Gobi matar masala, Green moong dal, Birista rice", "extra": "Masala Chass(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle,Lizzat Papad, Ghee"}, "Snacks": {"veg": "Bread pakoda or Dal ke pakode, Chutney, Seasonal fruits", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Veg Korma, Arhar Dal, Ice cream(Butterscotch)", "extra": "Chilly Chicken or Chicken curry, Veg Fried Rice, veg Raita(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}};
+const mealNames=["Breakfast","Lunch","Snacks","Dinner"];
+let selected="Dinner";
+const dateInput=document.getElementById("date");
+dateInput.value="2026-11-13";
+const dateObj=()=>new Date(dateInput.value+"T12:00:00");
+const fmt=d=>d.toLocaleDateString("en-IN",{day:"numeric",month:"long"});
+function render(){
+ const d=dateObj(), day=d.toLocaleDateString("en-US",{weekday:"long"});
+ document.getElementById("dayname").textContent=day;
+ document.getElementById("prettydate").textContent=fmt(d);
+ document.getElementById("meals").innerHTML=mealNames.map(m=>`<div class="meal"><button class="${m===selected?'active':''}" data-meal="${m}">${m}</button></div>`).join("");
+ document.querySelectorAll("[data-meal]").forEach(b=>b.onclick=()=>{selected=b.dataset.meal;render()});
+ const item=DATA[day]?.[selected];
+ document.getElementById("menu").innerHTML=item?`
+ <article class="card"><div class="cardhead"><h2>${selected}</h2><span class="tag">Main menu · Veg</span></div><div class="food">${esc(item.veg)||"Not listed"}</div></article>
+ <article class="card"><div class="cardhead"><h2>Additional item</h2><span class="tag">As listed</span></div><div class="food">${esc(item.extra)||"No additional item listed"}</div></article>
+ <article class="card common"><div class="cardhead"><h2>Common items</h2><span class="tag">Available with meal</span></div><div class="food">${esc(item.common)||"Not listed"}</div></article>`:`<div class="empty">No menu entry found for this date.</div>`;
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function shift(n){let d=dateObj();d.setDate(d.getDate()+n);let v=d.toISOString().slice(0,10);if(v>="2026-11-01"&&v<="2026-11-30"){dateInput.value=v;render();}}
+document.getElementById("prev").onclick=()=>shift(-1);document.getElementById("next").onclick=()=>shift(1);
+dateInput.onchange=()=>{if(dateInput.value){selected="Dinner";render();}};
+document.getElementById("search").oninput=e=>{
+ const q=e.target.value.trim().toLowerCase(), box=document.getElementById("results");
+ if(!q){box.innerHTML="";return;}
+ let out=[];
+ for(const [day,meals] of Object.entries(DATA))for(const [meal,v] of Object.entries(meals)){
+  for(const [kind,text] of [["Veg",v.veg],["Additional",v.extra],["Common",v.common]])if(text.toLowerCase().includes(q))out.push(`<div class="result"><b>${day} · ${meal} · ${kind}</b><p>${esc(text)}</p></div>`);
+ }
+ box.innerHTML=out.length?out.join(""):'<div class="empty">No matches in this month’s menu.</div>';
+};
+render();
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script></body></html>
