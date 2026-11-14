@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#000000"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><title>IITJ Mess Menu</title>
 <style>
-:root{color-scheme:dark;--bg:#000;--fg:#fff;--dim:#a8a8a8;--line:#444;--nonveg:#FF8C00;--sweet:#F4B400;--dairy:#00C2CB;--veg:#A7C957;--gold:#F4B400}
+:root{color-scheme:dark;--bg:#000;--fg:#fff;--dim:#a8a8a8;--line:#444;--nonveg:#FF8C00;--sweet:#F4B400;--dairy:#00C2CB;--veg:#A7C957;--gold:#F4B400;--lilac:#E6D6FF}
 *{box-sizing:border-box}
 html{background:var(--bg);-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--fg);font:16px/1.4 "Courier New",ui-monospace,"Lucida Console",monospace;letter-spacing:.02em}
@@ -13,15 +13,16 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .up{text-transform:uppercase}
 /* header */
 .bar{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.title{font-size:20px;font-weight:700;white-space:nowrap;text-transform:uppercase}
-.clock{color:var(--gold);font-weight:700;font-size:13px;white-space:nowrap;text-transform:uppercase}
+.title{font-size:20px;font-weight:700;white-space:nowrap;text-transform:uppercase;flex:none}
+.clock{color:var(--gold);font-weight:700;font-size:13px;white-space:nowrap;text-transform:uppercase;flex:none;font-variant-numeric:tabular-nums}
 .sub{color:var(--dim);font-size:11px;white-space:nowrap;text-transform:uppercase;margin-top:1px}
 .label{color:var(--dim);font-size:11px;margin:14px 0 6px;white-space:nowrap;text-transform:uppercase}
 /* selectors */
 .days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .days button{padding:9px 0;border:1px solid var(--line);text-align:center;white-space:nowrap;min-width:0;text-transform:uppercase;font-weight:700}
 .days button.today:not(.active){border-color:var(--fg)}
-.days button.active,.meals button.active{background:var(--gold);border-color:var(--gold);color:#000}
+.days button.active{background:var(--gold);border-color:var(--gold);color:#000}
+.meals button.active{border:2px solid var(--fg);padding:6px 7px}
 .meals{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .meals button{position:relative;border:1px solid var(--line);padding:7px 8px;min-width:0;overflow:hidden;font-size:16px}
 .mrow{display:flex;align-items:center;gap:6px;white-space:nowrap}
@@ -46,7 +47,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .status[hidden]{display:none}
 /* sections */
 .block{margin-top:20px;--d:var(--veg)}
-.block.extra{--d:#fff}.block.common{--d:#cfcfcf}
+.block.extra{--d:#fff}.block.common{--d:var(--lilac)}
 .bhead{display:flex;align-items:center;justify-content:space-between;gap:8px;text-transform:uppercase}
 .bhead h2{margin:0;font-size:13px;font-weight:700;background:var(--d);color:#000;padding:3px 9px;white-space:nowrap;letter-spacing:.06em}
 .bhead .tag{color:var(--dim);font-size:11px;white-space:nowrap;min-width:0}
@@ -57,6 +58,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .it .tx{min-width:0;overflow-wrap:anywhere}
 .it em{flex:none;margin-left:auto;font-style:normal;font-size:10px;letter-spacing:.08em;background:var(--c);color:#000;padding:2px 6px;margin-top:.5em;font-weight:700;text-transform:uppercase}
 .it.sweet{--c:var(--sweet)}.it.nonveg{--c:var(--nonveg)}.it.dairy{--c:var(--dairy)}
+.para{margin:10px 0 0;font-size:21px;line-height:1.75;font-weight:400;letter-spacing:0;color:#dcdcdc;overflow-wrap:anywhere}
+.ci{position:relative;padding-left:15px;margin-right:12px;--c:var(--lilac)}
+.ci:before{content:"";position:absolute;left:0;top:.4em;width:9px;height:9px;background:var(--c)}
+.ci.sweet{--c:var(--sweet)}.ci.nonveg{--c:var(--nonveg)}.ci.dairy{--c:var(--dairy)}
 .nolist{color:var(--dim);font-size:15px;padding:10px 0}
 .inline{margin:8px 0 0;font-size:15px;line-height:1.65;color:#e8e8e8;letter-spacing:.01em;overflow-wrap:anywhere}
 .inline .sep{color:#777}
@@ -81,7 +86,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 <div class="hero"><div class="hrow"><h1 id="dayname">Dinner</h1><button class="jump" id="jump" hidden>↺ Now</button></div>
 <div class="htime" id="htime"></div><div class="hday" id="prettydate"></div><span class="status" id="status" hidden></span></div>
 <section id="menu"></section>
-<div class="legend"><span style="--c:var(--nonveg)">Non-veg</span><span style="--c:var(--sweet)">Sweet</span><span style="--c:var(--dairy)">Dairy / drink</span><span style="--c:var(--veg)">Main</span></div>
+<div class="legend"><span style="--c:var(--nonveg)">Non-veg</span><span style="--c:var(--sweet)">Sweet</span><span style="--c:var(--dairy)">Dairy / drink</span><span style="--c:var(--veg)">Main</span><span style="--c:var(--lilac)">Common</span></div>
 <input class="search" id="search" type="search" placeholder="Search the weekly menu..." autocomplete="off" aria-label="Search the weekly menu">
 <div id="results" class="results"></div>
 <p class="hint">Select by tapping day and meal</p>
@@ -100,7 +105,7 @@ const f12=m=>{let h=Math.floor(m/60);const mm=m%60,ap=h>=12?"PM":"AM";h=h%12||12
 const full=m=>{const a=f12(m);return a.t+" "+a.ap;};
 const range=([s,e],short)=>{const a=f12(s),b=f12(e);return short?`${a.t}–${b.t}`:(a.ap===b.ap?`${a.t}–${b.t} ${b.ap}`:`${a.t} ${a.ap}–${b.t} ${b.ap}`);};
 const TZ="Asia/Kolkata";
-function ist(){const p=new Intl.DateTimeFormat("en-US",{timeZone:TZ,weekday:"long",hour:"numeric",minute:"numeric",hour12:false}).formatToParts(new Date());const g=t=>p.find(x=>x.type===t).value;return{day:g("weekday"),h:(+g("hour"))%24,m:+g("minute")};}
+function ist(){const p=new Intl.DateTimeFormat("en-US",{timeZone:TZ,weekday:"long",hour:"numeric",minute:"numeric",second:"numeric",hour12:false}).formatToParts(new Date());const g=t=>p.find(x=>x.type===t).value;return{day:g("weekday"),h:(+g("hour"))%24,m:+g("minute"),s:+g("second")};}
 /* the meal being served, or the next one coming up */
 function live(){const t=ist(),mins=t.h*60+t.m,S=sched(t.day);
  for(const m of mealNames){const[s,e]=S[m];if(mins<e)return{day:t.day,meal:m,tag:mins>=s?"Now":"Next",t};}
@@ -114,15 +119,17 @@ function splitItems(s){const out=[];let d=0,cur="";for(const ch of String(s??"")
 const LBL={sweet:"Sweet",nonveg:"Non-veg",dairy:"Dairy"};
 function cat(i){const s=i.toLowerCase();
  if(/chicken|egg|fish|mutton|keema|prawn/.test(s))return"nonveg";
- if(/kheer|jalebi|gulab|jamun|rabri|shahi tukda|barfi|ice cream|halwa|sweet lassi/.test(s))return"sweet";
+ if(/kheer|jalebi|jam\b|gulab|jamun|rabri|shahi tukda|barfi|ice cream|halwa|sweet lassi/.test(s))return"sweet";
  if(/milk|tea\b|coffee|bournvita|lassi|chaas|chass|curd|raita/.test(s))return"dairy";
  return"plain";}
-const list=arr=>arr.length?`<ul class="items">${arr.map(i=>{const c=cat(i);return`<li class="it ${c}"><i></i><span class="tx">${wrap(i)}</span>${c!=="plain"?`<em>${LBL[c]}</em>`:""}</li>`}).join("")}</ul>`:`<div class="nolist">— none listed —</div>`;
+const para=arr=>arr.length?`<p class="para">${arr.map(i=>`<span class="ci ${cat(i)}">${wrap(i)}</span>`).join(" ")}</p>`:`<div class="nolist">— none listed —</div>`;
+function list(arr,sec){return arr.length?`<ul class="items">${arr.map(i=>{const c=cat(i);const tag=c!=="plain"?LBL[c]:(sec==="common"?"Common":"");return`<li class="it ${c}"><i></i><span class="tx">${wrap(i)}</span>${tag?`<em>${tag}</em>`:""}</li>`}).join("")}</ul>`:`<div class="nolist">— none listed —</div>`;}
 /* shrink text until it fits its box (no horizontal overflow) */
 function fitEl(el,max,min){let s=max;el.style.fontSize=s+"px";while(el.scrollWidth>el.clientWidth+1&&s>min){s-=.5;el.style.fontSize=s+"px";}}
 function fitGroup(els,max,min){if(!els.length)return;let s=max;const set=v=>els.forEach(e=>e.style.fontSize=v+"px");set(s);while(s>min&&els.some(e=>e.scrollWidth>e.clientWidth+1)){s-=.5;set(s);}}
+function fitBar(){const bar=document.querySelector(".bar"),t=document.getElementById("ttl"),c=document.getElementById("clock");let f=1;const set=()=>{t.style.fontSize=(20*f)+"px";c.style.fontSize=(13*f)+"px";};set();while(bar.scrollWidth>bar.clientWidth+1&&f>.55){f-=.03;set();}}
 function fitAll(){
- fitEl(document.getElementById("ttl"),20,12);fitEl(document.getElementById("clock"),13,9);fitEl(document.getElementById("sub"),11,8);
+ fitBar();fitEl(document.getElementById("sub"),11,8);
  fitGroup([...document.querySelectorAll("#days button")],14,8);
  fitGroup([...document.querySelectorAll("#meals button")],16,9);
  fitEl(document.getElementById("dayname"),36,16);
@@ -147,14 +154,14 @@ function render(){
  document.getElementById("menu").innerHTML=item?`
  <article class="block main"><div class="bhead"><h2>Main menu</h2><span class="tag">Veg</span></div>${list(splitItems(item.veg))}</article>
  <article class="block extra"><div class="bhead"><h2>Additional item</h2><span class="tag">As listed</span></div>${list(splitItems(item.extra))}</article>
- <article class="block common"><div class="bhead"><h2>Common items</h2><span class="tag">With meal</span></div><p class="inline">${splitItems(item.common).map(wrap).join('<span class="sep"> / </span>')||"Not listed"}</p></article>`:`<div class="empty">No menu entry found.</div>`;
+ <article class="block common"><div class="bhead"><h2>Common items</h2><span class="tag">With meal</span></div>${para(splitItems(item.common))}</article>`:`<div class="empty">No menu entry found.</div>`;
  fitAll();
 }
 function tick(){
  const n=live(),t=n.t,p=x=>String(x).padStart(2,"0");
- document.getElementById("clock").textContent=`${t.day.slice(0,3)} ${p(t.h)}:${p(t.m)} IST`;
- if(keyOf(n)!==keyOf(L)){if(!manual){day=n.day;selected=n.meal;}render();}
- fitEl(document.getElementById("clock"),13,9);
+ document.getElementById("clock").textContent=`${t.day.slice(0,3)} ${p(t.h)}:${p(t.m)}:${p(t.s)} IST`;
+ /* when the live meal changes, snap back to it even if you were browsing another day/meal */
+ if(keyOf(n)!==keyOf(L)){manual=false;day=n.day;selected=n.meal;render();}
 }
 document.getElementById("jump").onclick=()=>{manual=false;day=L.day;selected=L.meal;render();};
 document.getElementById("search").oninput=e=>{
@@ -167,9 +174,18 @@ document.getElementById("search").oninput=e=>{
  box.innerHTML=out.length?out.join(""):'<div class="empty">No matches in the weekly menu.</div>';
 };
 addEventListener("resize",fitAll);
-document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick();});
-setInterval(tick,30000);
+let hiddenAt=0;
+document.addEventListener("visibilitychange",()=>{
+ if(document.hidden){hiddenAt=Date.now();return;}
+ /* coming back to the app after a while: jump to the current meal */
+ if(hiddenAt&&Date.now()-hiddenAt>60000){manual=false;const n=live();day=n.day;selected=n.meal;render();}
+ hiddenAt=0;tick();
+});
+addEventListener("pageshow",tick);addEventListener("focus",tick);
+setInterval(tick,1000);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);
 render();tick();
-if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+if("serviceWorker" in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;
+ navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=true;location.reload();}});
+ addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
 </script></body></html>
