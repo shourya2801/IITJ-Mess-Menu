@@ -53,6 +53,11 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 /* sections */
 .block{margin-top:20px;--d:var(--veg)}
 .block.extra{--d:#fff}.block.common{--d:var(--lilac)}.block.jain{--d:var(--beige)}
+.xbanner{margin:12px 0 0;background:#fff;color:#000;font-weight:700;font-size:12px;line-height:1.3;padding:6px 8px;text-transform:uppercase;overflow-wrap:anywhere}
+.xbanner[hidden]{display:none}
+.xnote{margin-top:16px;border:1px solid #fff;padding:8px 10px;font-size:12px;line-height:1.45;text-transform:uppercase;overflow-wrap:anywhere}
+.xnote b{background:#fff;color:#000;padding:1px 6px;margin-right:6px}
+.src{font-size:10px;letter-spacing:.05em;color:var(--dim);margin:12px 0 0;text-transform:uppercase;line-height:1.4}.src.err{color:var(--nonveg)}
 .jnote{margin-top:20px;border:1px dashed var(--beige);color:var(--beige);padding:10px;font-size:13px;line-height:1.4}
 .bhead{display:flex;align-items:center;justify-content:space-between;gap:8px;text-transform:uppercase}
 .bhead h2{margin:0;font-size:13px;font-weight:700;background:var(--d);color:#000;padding:3px 9px;white-space:nowrap;letter-spacing:.06em}
@@ -85,6 +90,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 </style></head><body><main><div class="screen">
 <div class="bar"><div class="title" id="ttl">MESS MENU</div><div class="clock" id="clock">--</div></div>
 <div class="sub" id="sub">IIT JODHPUR · DINING</div>
+<div class="xbanner" id="xb" hidden></div>
 <div class="label">Mess</div>
 <div class="mess" id="mess"></div>
 <div class="label">Day</div>
@@ -98,11 +104,14 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 <input class="search" id="search" type="search" placeholder="Search the weekly menu..." autocomplete="off" aria-label="Search the weekly menu">
 <div id="results" class="results"></div>
 <p class="hint">Select by tapping day and meal</p>
-<p class="note">Menu data is taken from the uploaded November 2026 non-veg and veg mess menus, which repeat every week. The Jain tab shows the veg mess menu with the Jain dish listed on the veg sheet (dinner only). “Additional item” is shown exactly as the sheet lists it; it isn't always a non-veg dish. The meal opens automatically by India time (IST).</p>
-</div></main><script>
+<p class="note">Menu data is taken from the uploaded November 2026 non-veg and veg mess menus, which repeat every week. The Jain tab shows the veg mess menu with the Jain dish listed on the veg sheet (dinner only). “Additional item” is shown exactly as the sheet lists it; it isn't always a non-veg dish. The meal opens automatically by India time (IST). Date-specific changes (like exam-week breakfast) come from the menu sheet.</p>
+<p class="src" id="src"></p>
+</div></main><script src="config.js"></script><script>
 const DATA={"Monday": {"Breakfast": {"veg": "Masala Poori, Matar Sabzi and Kheer", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Gobi Achari, kala chana, Moong dal", "extra": "Boondi raita(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad, Ghee"}, "Snacks": {"veg": "Dahi bada, Mirchi Chutney, Imli Chutney", "extra": "__", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "khatta Meetha Kaddu, Sabut Masoor dal, Gulab Jamun", "extra": "Egg Burji", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums,Ghee"}}, "Tuesday": {"Breakfast": {"veg": "Idli+Fried Idli or Idli+Medu Vada, Sambhar, Coconut Chutney, Tomato Chutney", "extra": "Banana(2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Chana dal, Kashmiri Dum aloo, Aloo palak", "extra": "Curd(100ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad,Ghee"}, "Snacks": {"veg": "Aloo tikki, dahi, chole, Chutney, onion", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Methhi Matar Malai, Mix Veg, Dal Makhani, Jeera Rice", "extra": "—", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums,Ghee"}}, "Wednesday": {"Breakfast": {"veg": "Poha, Sambar and Jalebi", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Malai kofta , Cabbage Matar, dal palak", "extra": "Veg Raita(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle,Lizzat Papad, Ghee"}, "Snacks": {"veg": "Pani puri, Imili pani", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Aloo Kundru(dry), Dal Fry, Shahi Tukda with rabri", "extra": "Chicken Butter Masala", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums,Ghee"}}, "Thursday": {"Breakfast": {"veg": "Methi Paratha, Aloo-matar ki Sabji, Dahi", "extra": "Banana(2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Kadi Pakora, Aloo-chokha, Lobiya Dal", "extra": "Sweet Lassi(200ml)", "common": "Plain Rice, Atta Roti, , Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle,Lizzat Papad, Ghee"}, "Snacks": {"veg": "Maggi , ketchup", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Mix Veg, veg manchurian, Channa Dal, Biryani", "extra": "__", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}, "Friday": {"Breakfast": {"veg": "Uttapam , Sambhar, Coconut Chutney", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Rajma , Gajar-beans-gobi sabzi, Dahi Aloo", "extra": "Pudina Chaas(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad, Ghee"}, "Snacks": {"veg": "Veg Sandwich , ketchup, Seasonal fruits", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Capsicum aloo, Dal Fry, Veg Biryani, Khoya Barfi", "extra": "Egg Curry with green peas and aloo", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}, "Saturday": {"Breakfast": {"veg": "Masala dosa, Coconut Chutney, Sambhar", "extra": "Boiled egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Hariyali Kofta, Gajar Matar sabzi, Lasooni Dal Tadka (arhar)", "extra": "Curd(100ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Lizzat Papad,Ghee"}, "Snacks": {"veg": "Vada pao + chutney or Pao Bhaji+lemon+onion", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Aloo spring onion fry, Chole Bhature, Dal Tadka (mix)", "extra": "", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}, "Sunday": {"Breakfast": {"veg": "Aloo Pyaaz paratha, Chutney, Dahi", "extra": "Boiled Egg (2)", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita"}, "Lunch": {"veg": "Soya Chunk, Gobi matar masala, Green moong dal, Birista rice", "extra": "Masala Chass(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle,Lizzat Papad, Ghee"}, "Snacks": {"veg": "Bread pakoda or Dal ke pakode, Chutney, Seasonal fruits", "extra": "—", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Veg Korma, Arhar Dal, Ice cream(Butterscotch)", "extra": "Chilly Chicken or Chicken curry, Veg Fried Rice, veg Raita(200ml)", "common": "Plain Rice, Atta Roti, Salad(Beetroot+tomato+onion+cucumber+lemon+chilli), Pickle, Fryums, Ghee"}}};
 const VEG={"Monday": {"Breakfast": {"veg": "Poha (Aloo/Sev), Mint Chutney, Jalebi", "extra": "", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita/Horlicks"}, "Lunch": {"veg": "Moong Dal, Soya bean dry, Veg Manchurian, Seasonal Fruits(Papaya+Apple+Guava)", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad, Ghee"}, "Snacks": {"veg": "Dhokla, Chutney(Mint)", "extra": "", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Dal Tadka(Chana), Gobi Masala Dry, Aloo beans Curry", "extra": "Beans curry", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}}, "Tuesday": {"Breakfast": {"veg": "Aloo Methi stuffed Pratha with green chutney, Curd", "extra": "", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita/Horlicks"}, "Lunch": {"veg": "Rajma Dal, kaddu dry, Hariyali Kofta", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}, "Snacks": {"veg": "Dahi Papdi, Chutney(Green+Red)", "extra": "", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Chhole Bhatura, Ridged Gourd Daal, Aloo Deep fry, Ice Cream", "extra": "Matar Paneer", "common": "Plain Rice, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}}, "Wednesday": {"Breakfast": {"veg": "Idli / Fried Idli, Sambhar, Coconut Chutney, Tomato Chutney", "extra": "", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita/Horlicks"}, "Lunch": {"veg": "Kadhi pakoda, Achari Aalo dry, Malai Kofta, Seasonal Fruits(Watermelon+Pine apple+Apple)", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}, "Snacks": {"veg": "Veg Cutlet/Pakoda, Chutney(Green+Red)", "extra": "", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Veg Fried Rice, Urad Dal, Paneer Butter Masala(100 gm paneer), Cabbage pakoda", "extra": "Gatte ki sazi", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad, Ghee"}}, "Thursday": {"Breakfast": {"veg": "Matar Poori and Sabji, Mint Chutney, Tomato Chutney", "extra": "", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita/Horlicks"}, "Lunch": {"veg": "Dal Makhani, Aalo Gobi matar dry, Dahi Baigan", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}, "Snacks": {"veg": "Samosa, Chutney+Sauce", "extra": "", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Dal tadka, Cauliflower fry, Kalakand(2pc)", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad, Ghee"}}, "Friday": {"Breakfast": {"veg": "Uttapam, Sambhar, Coconut chutney, Lusun Chutney", "extra": "", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita/Horlicks"}, "Lunch": {"veg": "Mix dal, Chole Masala, Mixed Vegetable dry, Seasonal Fruits(Papaya+Guava+Apple)", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}, "Snacks": {"veg": "Pav Bhaji, Chutney(Green+Red), Chopped Onion", "extra": "", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Navratan Pulao, Masoor Dal, Kaccha kela dry, Palak Paneer(100 gm paneer)", "extra": "papad sabzi", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}}, "Saturday": {"Breakfast": {"veg": "Palak Paratha with Korma, Curd, Tomato Chutney Pickle", "extra": "", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Oats, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita/Horlicks"}, "Lunch": {"veg": "Dal (Masoor), Jira+ green dhaniya aloo fry, lauki chana gravy, Vegetable Mix khichdi", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}, "Snacks": {"veg": "Cheese Sandwich, Ketchup", "extra": "", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Veg Khichdi, Daal Tadka, Alu-Baigan, Mix veg fry, Boondi Rabdi", "extra": "papad sabzi", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad, Ghee"}}, "Sunday": {"Breakfast": {"veg": "Masala Dosa, Sambhar, Coconut Chutney, Lusun Chutney", "extra": "", "common": "Toasted white/whole wheat bread, Butter, Jam, Sugar, Cornflakes, Sprouts-boiled chana, Milk(Non-Toned), Tea, Coffee, Bournvita/Horlicks"}, "Lunch": {"veg": "Channa dal fry, Cabbage matar Fry, White matar chhola, Seasonal Fruits(Watermelon+Pine Apple+Guava)", "extra": "", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad/Fryums, Ghee"}, "Snacks": {"veg": "Pani Puri with mashed masala aloo and chana", "extra": "", "common": "Milk(Non-Toned), Tea, Coffee"}, "Dinner": {"veg": "Lasooni Daal Tadka, Aalo palak dry, Moong masala(semi gravy), Paneer Biryani(150 gm Paneer), Rasmalai(2pc)", "extra": "kaccha kela", "common": "Plain Rice, Atta/Multigrain Roti, Salad(Beetroot+tomato+onion+carrot+lemon+chilli), Pickle, Papad, Ghee"}}};
-const MESSES={nonveg:{name:"Non-veg",data:DATA,extra:"Additional item",short:"Additional"},veg:{name:"Veg",data:VEG,extra:"Jain option",short:"Jain"},jain:{name:"Jain",data:VEG,extra:"Jain dish",short:"Jain"}};
+const BUILTIN_MENU={nonveg:DATA,veg:VEG};
+let MENU={nonveg:DATA,veg:VEG};   /* replaced by the Google Sheet when one is linked */
+const MESSES={nonveg:{name:"Non-veg",src:"nonveg",extra:"Additional item",short:"Additional"},veg:{name:"Veg",src:"veg",extra:"Jain option",short:"Jain"},jain:{name:"Jain",src:"veg",extra:"Jain dish",short:"Jain"}};
 let mess="nonveg";try{const m=localStorage.getItem("mess");if(MESSES[m])mess=m;}catch(e){}
 const cm=()=>MESSES[mess];
 const mealNames=["Breakfast","Lunch","Snacks","Dinner"];
@@ -112,14 +121,32 @@ const SCHED={
  wk:{Breakfast:[450,600],Lunch:[735,885],Snacks:[1050,1110],Dinner:[1200,1350]},   /* Mon-Fri: 7:30-10:00, 12:15-2:45, 5:30-6:30, 8:00-10:30 */
  we:{Breakfast:[480,630],Lunch:[750,900],Snacks:[1050,1110],Dinner:[1200,1350]}    /* Sat-Sun: 8:00-10:30, 12:30-3:00, 5:30-6:30, 8:00-10:30 */
 };
+/* built-in copy of the exam-week breakfast (used only until/unless a Google Sheet is linked) */
+const BUILTIN_EXAM={
+ nonveg:{"2026-11-19":"Methi Paratha, Sabji, Curd","2026-11-20":"Poha, Sambar","2026-11-21":"Puri, Sabji, Seviyan Kheer","2026-11-22":"Vegetable Daliya, Banana","2026-11-23":"Idli, Fried Idli","2026-11-24":"Upma, Banana, Coconut Chutney","2026-11-25":"Pav Bhaji","2026-11-26":"Methi Paratha, Curd, Aloo Matar Sabji"},
+ veg:{"2026-11-19":"Puri Sabji","2026-11-20":"Poha","2026-11-21":"Palak Paratha","2026-11-22":"Pav Bhaji","2026-11-23":"Poha","2026-11-24":"Puri Sabji","2026-11-25":"Upma, Daliya","2026-11-26":"Idli, Fried Idli"}};
+const BUILTIN_OVR=Object.entries(BUILTIN_EXAM).flatMap(([ms,days])=>Object.entries(days).map(([date,main])=>({mess:ms,date,meal:"Breakfast",main,additional:"",common:"",start:430,end:null,note:"Exam period: revised breakfast, served from 7:10 AM. Other items as per the regular menu."})));
+/* date-specific changes: [{mess,date,meal,main,additional,common,start,end,note}] */
+let OVR=BUILTIN_OVR;
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const labelOf=iso=>(+iso.slice(8))+" "+MONTHS[+iso.slice(5,7)-1];
+/* date (IST) of the next time this weekday comes round, today included */
+function dateFor(dayName,t){const k=(DAYS.indexOf(dayName)-DAYS.indexOf(t.day)+7)%7;return new Date(Date.UTC(t.y,t.mo-1,t.d+k));}
+const isoOf=d=>d.toISOString().slice(0,10);
+function ovrFor(src,dayName,meal,t){const iso=isoOf(dateFor(dayName,t));
+ const ok=o=>o.date===iso&&(o.mess==="all"||o.mess===src);
+ return OVR.find(o=>ok(o)&&o.meal===meal)||OVR.find(o=>ok(o)&&!o.meal)||null;}
+function schedFor(dayName,t){const b=sched(dayName),S={};
+ for(const m of mealNames){S[m]=b[m];const o=ovrFor(cm().src,dayName,m,t);if(o&&(o.start!=null||o.end!=null))S[m]=[o.start??b[m][0],o.end??b[m][1]];}
+ return S;}
 const sched=d=>(d==="Saturday"||d==="Sunday")?SCHED.we:SCHED.wk;
 const f12=m=>{let h=Math.floor(m/60);const mm=m%60,ap=h>=12?"PM":"AM";h=h%12||12;return{t:h+":"+String(mm).padStart(2,"0"),ap};};
 const full=m=>{const a=f12(m);return a.t+" "+a.ap;};
 const range=([s,e],short)=>{const a=f12(s),b=f12(e);return short?`${a.t}–${b.t}`:(a.ap===b.ap?`${a.t}–${b.t} ${b.ap}`:`${a.t} ${a.ap}–${b.t} ${b.ap}`);};
 const TZ="Asia/Kolkata";
-function ist(){const p=new Intl.DateTimeFormat("en-US",{timeZone:TZ,weekday:"long",hour:"numeric",minute:"numeric",second:"numeric",hour12:false}).formatToParts(new Date());const g=t=>p.find(x=>x.type===t).value;return{day:g("weekday"),h:(+g("hour"))%24,m:+g("minute"),s:+g("second")};}
+function ist(){const p=new Intl.DateTimeFormat("en-US",{timeZone:TZ,year:"numeric",month:"numeric",day:"numeric",weekday:"long",hour:"numeric",minute:"numeric",second:"numeric",hour12:false}).formatToParts(new Date());const g=t=>p.find(x=>x.type===t).value;return{y:+g("year"),mo:+g("month"),d:+g("day"),day:g("weekday"),h:(+g("hour"))%24,m:+g("minute"),s:+g("second")};}
 /* the meal being served, or the next one coming up */
-function live(){const t=ist(),mins=t.h*60+t.m,S=sched(t.day);
+function live(){const t=ist(),mins=t.h*60+t.m,S=schedFor(t.day,t);
  for(const m of mealNames){const[s,e]=S[m];if(mins<e)return{day:t.day,meal:m,tag:mins>=s?"Now":"Next",t};}
  return{day:DAYS[(DAYS.indexOf(t.day)+1)%7],meal:"Breakfast",tag:"Next",t};}
 const keyOf=x=>[x.day,x.meal,x.tag,x.t.day].join("|");
@@ -152,7 +179,8 @@ function fitAll(){
 function menuHTML(item){
  if(!item)return`<div class="empty">No menu entry found.</div>`;
  const ex=splitItems(item.extra);
- const main=`<article class="block main"><div class="bhead"><h2>Main menu</h2><span class="tag">${mess==="jain"?"Veg mess menu":"Veg"}</span></div>${list(splitItems(item.veg))}</article>`;
+ const xn=item._note?`<div class="xnote"><b>Notice</b>${esc(item._label)} · ${esc(item._note)}</div>`:"";
+ const main=xn+`<article class="block main"><div class="bhead"><h2>Main menu</h2><span class="tag">${item._rev?"Revised · "+item._label:(mess==="jain"?"Veg mess menu":"Veg")}</span></div>${list(splitItems(item.veg))}</article>`;
  const common=`<article class="block common"><div class="bhead"><h2>Common items</h2><span class="tag">With meal</span></div>${para(splitItems(item.common))}</article>`;
  if(mess==="jain"){
   const jb=ex.length?`<article class="block jain"><div class="bhead"><h2>Jain dish</h2><span class="tag">Dinner</span></div>${list(ex)}</article>`:`<div class="jnote">No separate Jain dish is listed for this meal. It follows the veg mess menu below.</div>`;
@@ -166,7 +194,7 @@ function render(){
  document.querySelectorAll("[data-mess]").forEach(b=>b.onclick=()=>{mess=b.dataset.mess;try{localStorage.setItem("mess",mess);}catch(e){}render();document.getElementById("search").dispatchEvent(new Event("input"));});
  document.getElementById("days").innerHTML=DAYS.map(d=>`<button class="${d===day?'active':''} ${d===L.t.day?'today':''}" data-day="${d}" aria-pressed="${d===day}">${d.slice(0,3)}</button>`).join("");
  document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{day=b.dataset.day;manual=true;render()});
- const S=sched(day);
+ const S=schedFor(day,L.t);
  document.getElementById("meals").innerHTML=mealNames.map(m=>`<button class="${m===selected?'active':''}" data-meal="${m}" aria-pressed="${m===selected}"><span class="mrow"><span class="mname"><span class="cur">${m===selected?'&gt;':''}</span>${m}</span>${m===L.meal&&day===L.day?`<span class="chip">${L.tag}</span>`:""}</span><span class="mtime">${range(S[m],true)}</span></button>`).join("");
  document.querySelectorAll("[data-meal]").forEach(b=>b.onclick=()=>{selected=b.dataset.meal;manual=true;render()});
  document.getElementById("dayname").textContent=selected;
@@ -176,7 +204,17 @@ function render(){
  st.hidden=!isLive;
  if(isLive){st.className="status "+L.tag.toLowerCase();st.textContent=L.tag==="Now"?"● Serving now · ends "+full(S[selected][1]):"Up next · starts "+full(S[selected][0]);}
  const j=document.getElementById("jump");j.hidden=isLive;j.textContent="↺ "+L.tag;
- const item=cm().data[day]?.[selected];
+ let item=MENU[cm().src]?.[day]?.[selected];
+ const o=ovrFor(cm().src,day,selected,L.t);
+ if(!item&&o)item={veg:"",extra:"",common:""};   /* a date-specific row still shows even if the weekly menu has no entry */
+ if(item&&o){const base=item;item={...base,_note:o.note,_label:labelOf(o.date)};
+  if(o.main){const nm=x=>x.toLowerCase().replace(/\(.*?\)/g,"").replace(/\s+/g," ").trim();const have=new Set(splitItems(o.main).map(nm));item.veg=o.main;item._rev=true;
+   /* don't repeat a regular additional item (e.g. Banana) that the revised menu already lists */
+   if(!o.additional)item.extra=splitItems(base.extra).filter(x=>!have.has(nm(x))).join(", ");}
+  if(o.additional)item.extra=o.additional==="-"?"":o.additional;
+  if(o.common)item.common=o.common==="-"?"":o.common;}
+ const todayIso=isoOf(dateFor(L.t.day,L.t)),tn=OVR.find(x=>x.date===todayIso&&(x.mess==="all"||x.mess===cm().src)&&x.note);
+ const xb=document.getElementById("xb");xb.hidden=!tn;if(tn)xb.textContent=tn.note;
  document.getElementById("menu").innerHTML=menuHTML(item);
  fitAll();
 }
@@ -191,23 +229,94 @@ document.getElementById("search").oninput=e=>{
  const q=e.target.value.trim().toLowerCase(), box=document.getElementById("results");
  if(!q){box.innerHTML="";return;}
  let out=[];
- for(const [d,meals] of Object.entries(cm().data))for(const [meal,v] of Object.entries(meals)){
+ for(const [d,meals] of Object.entries(MENU[cm().src]||{}))for(const [meal,v] of Object.entries(meals)){
   for(const [kind,text] of [["Veg",v.veg],[cm().short,v.extra],["Common",v.common]])if(text.toLowerCase().includes(q))out.push(`<div class="result"><b>${d} · ${meal} · ${kind}</b><p>${wrap(text)}</p></div>`);
  }
  box.innerHTML=out.length?out.join(""):'<div class="empty">No matches in the weekly menu.</div>';
 };
+/* ---- editable menu: a Google Sheet published as CSV (link goes in config.js) ---- */
+const CFG=window.MESS_CONFIG||{};
+const norm=s=>String(s==null?"":s).trim();
+function parseCSV(t){const rows=[];let row=[],f="",q=false;
+ for(let i=0;i<t.length;i++){const c=t[i];
+  if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++;}else q=false;}else f+=c;}
+  else if(c==='"')q=true;
+  else if(c===","){row.push(f);f="";}
+  else if(c==="\n"){row.push(f);rows.push(row);row=[];f="";}
+  else if(c!=="\r")f+=c;}
+ row.push(f);rows.push(row);return rows;}
+function normDate(s){s=norm(s);let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/),y,mo,d;
+ if(m){y=+m[1];mo=+m[2];d=+m[3];}
+ else if(m=s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/)){const a=+m[1],b=+m[2];y=+m[3];if(a>12){d=a;mo=b;}else if(b>12){mo=a;d=b;}else{d=a;mo=b;}}
+ else if(m=s.match(/^(\d{1,2})\s+([A-Za-z]{3})[a-z]*\.?,?\s+(\d{4})$/)){d=+m[1];mo=MONTHS.findIndex(x=>x.toLowerCase()===m[2].toLowerCase())+1;y=+m[3];}
+ else return null;
+ if(!(mo>=1&&mo<=12&&d>=1&&d<=31))return null;
+ return y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
+const pmDefault=(meal,h)=>meal==="Dinner"||(meal==="Snacks"&&h<10)||(meal==="Lunch"&&h<=6);
+function parseTime(s,meal){const m=norm(s).toLowerCase().match(/^(\d{1,2})[:.](\d{2})(?::\d{2})?\s*([ap]m)?$/);if(!m)return null;
+ let h=+m[1];const mi=+m[2];
+ if(m[3])h=h%12+(m[3]==="pm"?12:0);else if(h<12&&pmDefault(meal,h))h+=12;
+ return(h>23||mi>59)?null:h*60+mi;}
+const findMeal=s=>{const k=norm(s).toLowerCase();return k?(mealNames.find(m=>m.toLowerCase().startsWith(k.slice(0,4)))||""):"";};
+const findDay=s=>{const k=norm(s).toLowerCase().slice(0,3);return k?(DAYS.find(d=>d.toLowerCase().startsWith(k))||""):"";};
+function findMess(s){const k=norm(s).toLowerCase().replace(/[^a-z]/g,"");if(!k)return"";
+ if(k.startsWith("all")||k==="both")return"all";if(k.includes("non"))return"nonveg";if(k.includes("jain")||k.includes("veg"))return"veg";return"";}
+function parseSheet(text){
+ const rows=parseCSV(text.replace(/^﻿/,"")).filter(r=>r.some(c=>norm(c)));
+ if(rows.length<2)return null;
+ const H=rows[0].map(h=>norm(h).toLowerCase());
+ const col=(...n)=>H.findIndex(h=>n.includes(h));
+ const I={mess:col("mess"),day:col("day"),date:col("date"),meal:col("meal"),main:col("main","main menu","menu","veg"),add:col("additional","additional item","jain","jain dish","jain option","extra"),com:col("common","common items","compulsory items","compulsory"),st:col("start"),en:col("end"),note:col("note","notice")};
+ if(I.meal<0||I.main<0||(I.day<0&&I.date<0))return null;
+ const g=(r,i)=>i<0?"":norm(r[i]);
+ const menu={},ovr=[];let lm="",ld="",n=0,bad=0;
+ for(const r of rows.slice(1)){
+  const ms=findMess(g(r,I.mess));if(ms)lm=ms;
+  const dateRaw=g(r,I.date);
+  if(dateRaw){const iso=normDate(dateRaw),meal=findMeal(g(r,I.meal));
+   if(!iso||!lm){bad++;continue;}
+   ovr.push({mess:lm,date:iso,meal,main:g(r,I.main),additional:g(r,I.add),common:g(r,I.com),start:parseTime(g(r,I.st),meal),end:parseTime(g(r,I.en),meal),note:g(r,I.note)});continue;}
+  const dy=findDay(g(r,I.day));if(dy)ld=dy;
+  const meal=findMeal(g(r,I.meal));
+  if(!lm||lm==="all"||!ld||!meal){if(g(r,I.main))bad++;continue;}
+  ((menu[lm]??={})[ld]??={})[meal]={veg:g(r,I.main),extra:g(r,I.add),common:g(r,I.com)};n++;}
+ return n?{menu,ovr,n,bad}:null;}
+function applySheet(res){MENU={nonveg:res.menu.nonveg||BUILTIN_MENU.nonveg,veg:res.menu.veg||BUILTIN_MENU.veg};OVR=res.ovr;}
+let SRC={mode:CFG.sheetUrl?"loading":"builtin"},lastFetch=0;
+const hhmm=ms=>new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(ms));
+function showSrc(){const el=document.getElementById("src"),m=SRC.mode;let t="",err=false;
+ if(m==="builtin")t="Menu: built-in copy (no sheet linked)";
+ else if(m==="loading")t="Menu: loading from sheet...";
+ else if(m==="live")t=`Menu: live from sheet · ${hhmm(SRC.at)} IST · ${SRC.n} rows`+(SRC.o?` · ${SRC.o} date notices`:"")+(SRC.bad?` · ${SRC.bad} rows skipped`:"");
+ else if(m==="stale")t=`Menu: saved copy from ${hhmm(SRC.at)} IST (can't reach the sheet)`;
+ else{t="Menu: can't read the sheet, showing built-in copy";err=true;}
+ el.textContent=t;el.className="src"+(err?" err":"");}
+function initSheet(){if(!CFG.sheetUrl)return;
+ try{const c=JSON.parse(localStorage.getItem("menuSheet")||"null");if(c&&c.url===CFG.sheetUrl){const r=parseSheet(c.txt);if(r){applySheet(r);SRC={mode:"loading",at:c.at,cached:true};}}}catch(e){}}
+async function refresh(){
+ if(!CFG.sheetUrl){showSrc();return;}
+ lastFetch=Date.now();
+ try{const u=CFG.sheetUrl+(CFG.sheetUrl.includes("?")?"&":"?")+"_="+Date.now();
+  const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);
+  const txt=await r.text(),res=parseSheet(txt);if(!res)throw new Error("format");
+  applySheet(res);SRC={mode:"live",at:Date.now(),n:res.n,o:res.ovr.length,bad:res.bad};
+  try{localStorage.setItem("menuSheet",JSON.stringify({url:CFG.sheetUrl,at:Date.now(),txt}));}catch(e){}
+ }catch(e){SRC=SRC.at?{...SRC,mode:"stale"}:{mode:"err"};}
+ showSrc();render();document.getElementById("search").dispatchEvent(new Event("input"));}
+addEventListener("online",refresh);   /* internet came back: fetch the sheet straight away */
 addEventListener("resize",fitAll);
 let hiddenAt=0;
 document.addEventListener("visibilitychange",()=>{
  if(document.hidden){hiddenAt=Date.now();return;}
  /* coming back to the app after a while: jump to the current meal */
  if(hiddenAt&&Date.now()-hiddenAt>60000){manual=false;const n=live();day=n.day;selected=n.meal;render();}
- hiddenAt=0;tick();
+ hiddenAt=0;tick();if(Date.now()-lastFetch>60000)refresh();
 });
 addEventListener("pageshow",tick);addEventListener("focus",tick);
 setInterval(tick,1000);
+setInterval(refresh,Math.max(1,CFG.refreshMinutes||5)*60000);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);
-render();tick();
+initSheet();showSrc();render();tick();refresh();
 if("serviceWorker" in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;
  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=true;location.reload();}});
  addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
